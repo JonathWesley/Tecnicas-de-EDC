@@ -1,0 +1,2 @@
+# Tecnicas-de-EDC
+* Hamming
