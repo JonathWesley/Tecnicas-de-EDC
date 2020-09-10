@@ -1,3 +1,4 @@
+# retorna o resultado de uma xor entra 2 palavras de mesmo tamanho
 def xor(a, b):
     result = ''
     for i in range(len(a)):
@@ -8,37 +9,68 @@ def xor(a, b):
             result += '0'
     return result
 
+# remove todos os zeros a esquerda de uma palavra
 def removeZeros(data):
     for i in range(len(data)):
         if data[i] == '1':
             return data[i:]
     return '0000'
 
-def binaryDivision(data, crc):
+# retorna o resto da divisao de data por crc
+def remainder(data, crc):
+    # remove os zeros a direta de data
     dataAux = removeZeros(data)
+    # xor entre os 4 bits a direita de data com crc
     resultXor = xor(dataAux[:4], crc)
+    # junta o resultado da xor com os ultimos digitos de data
     result = resultXor + dataAux[4:]
     if len(result) <= 4:
         return result
     else:
-        return binaryDivision(result, crc)
+        return remainder(result, crc)
+    
+# verifica se a string passada eh um numero binario
+def checkBinary(b):
+    s = {'0', '1'} 
+    if s == set(b):
+        return True
+    else: 
+        return False
+    
+# garante o input correto das palavras
+def dataInsert(wordName, size):
+    r = input(wordName + ": ")
+    while len(r) != size or checkBinary(r) == False:   
+        print(wordName + " com formato incorreto. Digite novamente.")
+        r = input(wordName + ": ")
+    return r
+
+def verifyZero(b):
+    s = {'0'} 
+    if s == set(b):
+        return True
+    else: 
+        return False
     
 if __name__ == '__main__':
-    data = '10101010'#input("Dado: ")
-    crc = '1110'#input("CRC: ")
+    data = dataInsert("Palavra", 8)
+    crc = dataInsert("CRC", 4)
     
     msgSent = data
     
+    # adiciona os bits de CRC
     data += '000'
     
-    rest = binaryDivision(data, crc)
+    rest = remainder(data, crc)
     
+    print("Paridade: " + rest[-3:])
     msgSent += rest[-3:]
-
     print("Mensagem enviada: " + msgSent)
     
-    msgReceived = '10101010010'#input("Mensagem recebida: ")
+    msgReceived = dataInsert("Palavra recebida", 11)
     
-    rest = binaryDivision(msgReceived, crc)
+    rest = remainder(msgReceived, crc)
+    print("Resto de verificação: " + rest)
     
-    print("Show") if rest[-3:] == '000' else print("Algo de errado nao esta certo")
+    print("Mensagem recebida corretamente.") if verifyZero(rest) == True else print("Falha detectada.")
+    
