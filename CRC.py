@@ -14,20 +14,23 @@ def removeZeros(data):
     for i in range(len(data)):
         if data[i] == '1':
             return data[i:]
-    return '0000'
+    return '000'
 
 # retorna o resto da divisao de data por crc
 def remainder(data, crc):
     # remove os zeros a direta de data
     dataAux = removeZeros(data)
+    
+    # se a palavra for menor que 4, nao tem mais como dividir
+    if len(dataAux) < 4:
+        return dataAux
+    
     # xor entre os 4 bits a direita de data com crc
     resultXor = xor(dataAux[:4], crc)
     # junta o resultado da xor com os ultimos digitos de data
     result = resultXor + dataAux[4:]
-    if len(result) <= 4:
-        return result
-    else:
-        return remainder(result, crc)
+    # faz mais uma divisao
+    return remainder(result, crc)
     
 # verifica se a string passada eh um numero binario
 def checkBinary(b):
