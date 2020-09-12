@@ -58,11 +58,10 @@ def communicationError(b, size):
 
 # verifica se a string passada eh um numero binario
 def checkBinary(b):
-    s = {'0', '1'} 
-    if s == set(b):
-        return True
-    else: 
-        return False
+    for i in range(len(b)):
+        if b[i] != '0' and b[i] != '1':
+            return False
+    return True
 
 # garante o input correto das palavras
 def dataInsert(n, size):

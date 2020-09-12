@@ -34,11 +34,10 @@ def remainder(data, crc):
     
 # verifica se a string passada eh um numero binario
 def checkBinary(b):
-    s = {'0', '1'} 
-    if s == set(b):
-        return True
-    else: 
-        return False
+    for i in range(len(b)):
+        if b[i] != '0' and b[i] != '1':
+            return False
+    return True
     
 # garante o input correto das palavras
 def dataInsert(wordName, size):
@@ -56,7 +55,7 @@ def verifyZero(b):
         return False
     
 if __name__ == '__main__':
-    data = dataInsert("Palavra", 8)
+    data = dataInsert("Palavra", 11)
     crc = dataInsert("CRC", 4)
     
     msgSent = data
@@ -66,14 +65,22 @@ if __name__ == '__main__':
     
     rest = remainder(data, crc)
     
-    print("Paridade: " + rest[-3:])
-    msgSent += rest[-3:]
+    result = ''
+    cont = len(rest)
+    while cont < 3:
+        result += '0'
+        cont += 1
+    result += rest
+    
+    print("Paridade: " + result[-3:])
+    msgSent += result[-3:]
     print("Mensagem enviada: " + msgSent)
     
-    msgReceived = dataInsert("Palavra recebida", 11)
+    msgReceived = dataInsert("Palavra recebida", 14)
     
     rest = remainder(msgReceived, crc)
-    print("Resto de verificação: " + rest)
     
-    print("Mensagem recebida corretamente.") if verifyZero(rest) == True else print("Falha detectada.")
+    print("Resto de verificação: " + result[-3:])
+    
+    print("Mensagem recebida corretamente.") if verifyZero(result) == True else print("Falha detectada.")
     
