@@ -97,4 +97,11 @@ if __name__ == '__main__':
         print("Mensagem enviada com sucesso.")
     else:
         print("Erro detectado na posição: " + errorPosition)
-    
+        position = int(errorPosition,2)
+        correctedWord = ''
+        for i in range(len(hamming)):
+            if i == position - 1:
+                correctedWord += '1' if hamming[i] == '0' else '0'
+            else:
+                correctedWord += hamming[i] 
+        print("Palavra Corrigida: " + correctedWord)
